@@ -362,4 +362,3 @@ class A5 {
         game.placeDisks(row, col);
     }
 }
-
