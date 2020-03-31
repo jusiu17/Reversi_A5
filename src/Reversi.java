@@ -5,7 +5,7 @@ import java.util.Scanner;
  *     gameBoard : 0 as empty, 1 as AI and 2 as Player
  */
 
-enum BoardCol {A, B, C, D, E, F, G, H};
+enum BoardCol {A, B, C, D, E, F, G, H}
 
 public class Reversi {
     private boolean turn;
@@ -13,7 +13,6 @@ public class Reversi {
     private boolean[][] possibleMove;
     private int firstCount;
     private int secondCount;
-    private int round;
 
     public Reversi(){
         this.turn = true;
@@ -21,7 +20,6 @@ public class Reversi {
         this.possibleMove = new boolean[8][8];
         this.firstCount = 0;
         this.secondCount = 0;
-        this.round = 0;
         clearBoard();
         initBoard();
     }
@@ -34,24 +32,14 @@ public class Reversi {
         this.turn = turn;
     }
 
-    public int[][] getGameBoard() {
-        return gameBoard;
-    }
-    public void setGameBoard(int[][] gameBoard) {
-        this.gameBoard = gameBoard;
-    }
     public void placeDisks(int row, int col){
         this.gameBoard[row][col] = turn ? 2 : 1;
         redrawBoard(row, col);
         countScore();
         this.turn = !turn;
         generatePossible();
-        this.round++;
     }
 
-    public boolean[][] getPossibleMove() {
-        return possibleMove;
-    }
     public void setPossibleMove(boolean[][] possibleMove) {
         this.possibleMove = possibleMove;
     }
@@ -79,7 +67,6 @@ public class Reversi {
         placeDisks(3,3);
         placeDisks(4,3);
         placeDisks(4,4);
-        this.round = 0;
         countScore();
         generatePossible();
     }
@@ -96,80 +83,6 @@ public class Reversi {
             }
         this.firstCount = scoreX;
         this.secondCount = scoreO;
-    }
-
-    private boolean valid_move(int row, int col, int rowMove, int colMove){
-        int notPlay = !turn ? 2 : 1;
-
-        if(gameBoard[row][col] != 0)
-            return false;
-
-        // check is border?
-        int newRow = row + rowMove;
-        int newCol = col + colMove;
-        if ((newRow < 0) || (newRow > 7)) {
-            return false;
-        }
-        if ((newCol < 0) || (newCol > 7)) {
-            return false;
-        }
-
-        // check next disk same?
-        if(gameBoard[newRow][newCol] != notPlay) {
-            return false;
-        }
-
-        // check next disk is border?
-        newRow = newRow + rowMove;
-        newCol = newCol + colMove;
-        if (newRow < 0 || newRow > 7) {
-            return false;
-        }
-        if (newCol < 0 || newCol > 7) {
-            return false;
-        }
-        // check is there same in further disk ?
-        return findSameDisk(newRow, newCol, rowMove, colMove);
-    }
-
-    private boolean findSameDisk(int newRow, int newCol, int rowMove, int colMove) {
-        int play = turn ? 2 : 1;
-
-        if(gameBoard[newRow][newCol] == play)
-            return true;
-        newRow += rowMove;
-        newCol += colMove;
-        if (newRow < 0 || newRow > 7) {
-            return false;
-        }
-        if (newCol < 0 || newCol > 7) {
-            return false;
-        }
-
-        return findSameDisk(newRow, newCol, rowMove, colMove);
-    }
-
-    private void generatePossible(){
-        boolean[][] move = new boolean[8][8];
-        for (int row = 0; row < 8; row++)
-            for (int col = 0; col < 8; col++)
-                move[row][col] = false;
-        boolean valid;
-        for (int i = 0; i < 8; i++)
-            for (int j = 0; j < 8; j++){
-                valid = valid_move(i,j,-1,-1);
-                if (!valid) valid = valid_move(i,j,-1,0);
-                if (!valid) valid = valid_move(i,j,-1,1);
-                if (!valid) valid = valid_move(i,j,0,1);
-                if (!valid) valid = valid_move(i,j,1,1);
-                if (!valid) valid = valid_move(i,j,1,0);
-                if (!valid) valid = valid_move(i,j,1,-1);
-                if (!valid) valid = valid_move(i,j,0,-1);
-
-                if(valid)
-                    move[i][j] = true;
-            }
-        setPossibleMove(move);
     }
 
     private void redrawBoard(int row, int col){
@@ -258,6 +171,80 @@ public class Reversi {
         }
     }
 
+    private boolean valid_move(int row, int col, int rowMove, int colMove){
+        int notPlay = !turn ? 2 : 1;
+
+        if(gameBoard[row][col] != 0)
+            return false;
+
+        // check is border?
+        int newRow = row + rowMove;
+        int newCol = col + colMove;
+        if ((newRow < 0) || (newRow > 7)) {
+            return false;
+        }
+        if ((newCol < 0) || (newCol > 7)) {
+            return false;
+        }
+
+        // check next disk same?
+        if(gameBoard[newRow][newCol] != notPlay) {
+            return false;
+        }
+
+        // check next disk is border?
+        newRow = newRow + rowMove;
+        newCol = newCol + colMove;
+        if (newRow < 0 || newRow > 7) {
+            return false;
+        }
+        if (newCol < 0 || newCol > 7) {
+            return false;
+        }
+        // check is there same in further disk ?
+        return findSameDisk(newRow, newCol, rowMove, colMove);
+    }
+
+    private boolean findSameDisk(int newRow, int newCol, int rowMove, int colMove) {
+        int play = turn ? 2 : 1;
+
+        if(gameBoard[newRow][newCol] == play)
+            return true;
+        newRow += rowMove;
+        newCol += colMove;
+        if (newRow < 0 || newRow > 7) {
+            return false;
+        }
+        if (newCol < 0 || newCol > 7) {
+            return false;
+        }
+
+        return findSameDisk(newRow, newCol, rowMove, colMove);
+    }
+
+    public void generatePossible(){
+        boolean[][] move = new boolean[8][8];
+        for (int row = 0; row < 8; row++)
+            for (int col = 0; col < 8; col++)
+                move[row][col] = false;
+        boolean valid;
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++){
+                valid = valid_move(i,j,-1,-1);
+                if (!valid) valid = valid_move(i,j,-1,0);
+                if (!valid) valid = valid_move(i,j,-1,1);
+                if (!valid) valid = valid_move(i,j,0,1);
+                if (!valid) valid = valid_move(i,j,1,1);
+                if (!valid) valid = valid_move(i,j,1,0);
+                if (!valid) valid = valid_move(i,j,1,-1);
+                if (!valid) valid = valid_move(i,j,0,-1);
+
+                if(valid)
+                    move[i][j] = true;
+            }
+        setPossibleMove(move);
+    }
+
     public boolean hasPossibleMove(){
         for (int row = 0; row < 8; row++)
             for (int col = 0; col < 8; col++)
@@ -308,28 +295,27 @@ public class Reversi {
 }
 
 class A5 {
+    static Reversi game = new Reversi();
     public static void main(String[] arg){
-        Reversi game = new Reversi();
-        Scanner input = new Scanner(System.in);
-        String position;
-        int row = 0;
-        int col = 0;
-
+        boolean endGame = false;
         do {
-            game.showGameBoard();
-            do {
-                if (game.isTurn())
-                    System.out.println(" Select a square which is a possible move(*)");
-                System.out.print(" " + (game.isTurn() ? "Player" : "AI") + " place disk (e.g. E3): ");
-                position = input.next();
-                char[] pos = position.toUpperCase().toCharArray();
-                col = BoardCol.valueOf(String.valueOf(pos[0])).ordinal();
-                row = pos[1] - 49;
-                if (!game.isPossibleMove(row, col))
-                    System.out.println(" Invalid move!!\n ");
-            } while(!game.isPossibleMove(row,col));
-            game.placeDisks(row,col);
-        } while(!game.checkFull() && game.hasPossibleMove());
+            if(!game.checkFull()) {
+                if (game.hasPossibleMove()) {
+                    askMovement();
+                } else {
+                    System.out.print(" " + (game.isTurn() ? "Player" : "AI") + " has no possible move\n Chance passes back to " + (!game.isTurn() ? "Player" : "AI"));
+                    game.setTurn(!game.isTurn());
+                    game.generatePossible();
+                    if (game.hasPossibleMove()) {
+                        askMovement();
+                    } else {
+                        endGame = true;
+                    }
+                }
+            }
+            else
+                endGame = true;
+        } while(!endGame);
 
         if(game.getFirstCount() > game.getSecondCount())
             System.out.println("\t" + (!game.isTurn()?"Player":"AI") + " Wins !!!");
@@ -338,6 +324,26 @@ class A5 {
         else
             System.out.println("\tIt is a draw.\n");
         System.out.println("Thanks for playing!!!");
+    }
+
+    public static void askMovement(){
+        Scanner input = new Scanner(System.in);
+        String position;
+        int row;
+        int col;
+        game.showGameBoard();
+        do {
+            if (game.isTurn())
+                System.out.println(" Select a square which is a possible move(*)");
+            System.out.print(" " + (game.isTurn() ? "Player" : "AI") + " place disk (e.g. E3): ");
+            position = input.next();
+            char[] pos = position.toUpperCase().toCharArray();
+            col = BoardCol.valueOf(String.valueOf(pos[0])).ordinal();
+            row = pos[1] - 49;
+            if (!game.isPossibleMove(row, col))
+                System.out.println(" Invalid move!!\n ");
+        } while (!game.isPossibleMove(row, col));
+        game.placeDisks(row, col);
     }
 }
 
