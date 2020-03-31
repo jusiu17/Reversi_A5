@@ -94,6 +94,8 @@ public class Reversi {
     private void redrawRow(int row, int col){
         int play = turn ? 2 : 1;
         for (int i = col-1 ; i >= 0 ; i--) {
+            if (gameBoard[row][i] == 0)
+                break;
             if (gameBoard[row][i] == play) {
                 for (int k = i; k < col; k++) {
                     gameBoard[row][k] = play;
@@ -102,6 +104,8 @@ public class Reversi {
             }
         }
         for (int i = col+1 ; i < 8 ; i++) {
+            if (gameBoard[row][i] == 0)
+                break;
             if (gameBoard[row][i] == play) {
                 for (int k = i; k > col; k--) {
                     gameBoard[row][k] = play;
@@ -114,6 +118,8 @@ public class Reversi {
     private void redrawCol(int row, int col){
         int play = turn ? 2 : 1;
         for (int i = row-1 ; i >= 0 ; i--) {
+            if (gameBoard[i][col] == 0)
+                break;
             if (gameBoard[i][col] == play) {
                 for (int k = i; k < row; k++) {
                     gameBoard[k][col] = play;
@@ -122,6 +128,8 @@ public class Reversi {
             }
         }
         for (int i = row+1 ; i < 8 ; i++) {
+            if (gameBoard[i][col] == 0)
+                break;
             if (gameBoard[i][col] == play) {
                 for (int k = i; k > row; k--) {
                     gameBoard[k][col] = play;
@@ -136,6 +144,8 @@ public class Reversi {
 
         // diagonal \
         for (int i = row-1 , j = col-1 ; i >= 0 && j >= 0 ; i--, j--) {
+            if (gameBoard[i][j] == 0)
+                break;
             if (gameBoard[i][j] == play) {
                 for (int m = i, n = j; m < row && n < col; m++, n++) {
                     gameBoard[m][n] = play;
@@ -144,6 +154,8 @@ public class Reversi {
             }
         }
         for (int i = row+1 , j = col+1 ; i < 8 && j < 8 ; i++, j++) {
+            if (gameBoard[i][j] == 0)
+                break;
             if (gameBoard[i][j] == play) {
                 for (int m = i, n = j; m > row && n > col; m--, n--) {
                     gameBoard[m][n] = play;
@@ -154,6 +166,8 @@ public class Reversi {
 
         // diagonal /
         for (int i = row-1 , j = col+1 ; i >= 0 && j < 8 ; i--, j++) {
+            if (gameBoard[i][j] == 0)
+                break;
             if (gameBoard[i][j] == play) {
                 for (int m = i, n = j; m < row && n > col; m++, n--) {
                     gameBoard[m][n] = play;
@@ -162,6 +176,8 @@ public class Reversi {
             }
         }
         for (int i = row+1 , j = col-1 ; i < 8 && j >= 0 ; i++, j--) {
+            if (gameBoard[i][j] == 0)
+                break;
             if (gameBoard[i][j] == play) {
                 for (int m = i, n = j; m > row && n < col; m--, n++) {
                     gameBoard[m][n] = play;
