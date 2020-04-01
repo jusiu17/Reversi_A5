@@ -7,13 +7,27 @@ public class A5 {
         do {
             if(!game.checkFull()) {
                 if (game.hasPossibleMove()) {
-                    askMovement();
+                    if (game.isTurn())
+                        //TODO player for now
+                        //askPMCTSMovement();
+                        askPlayerMovement();
+                    else
+                        //TODO player for now
+                        //askHMCTSMovement();
+                        askPlayerMovement();
                 } else {
-                    System.out.print(" " + (game.isTurn() ? "Player" : "AI") + " has no possible move\n Chance passes back to " + (!game.isTurn() ? "Player" : "AI"));
+                    System.out.print(" " + (game.isTurn() ? "pMCTS" : "hMCTS") + " has no possible move\n Chance passes back to " + (!game.isTurn() ? "pMCTS" : "hMCTS"));
                     game.setTurn(!game.isTurn());
                     game.generatePossible();
                     if (game.hasPossibleMove()) {
-                        askMovement();
+                        if (game.isTurn())
+                            //TODO player for now
+                            //askPMCTSMovement();
+                            askPlayerMovement();
+                        else
+                            //TODO player for now
+                            //askHMCTSMovement();
+                            askPlayerMovement();
                     } else {
                         endGame = true;
                     }
@@ -25,24 +39,43 @@ public class A5 {
 
         game.showGameBoard();
         if(game.getFirstCount() > game.getSecondCount())
-            System.out.println("\tPlayer Wins !!!");
+            System.out.println("\tpMCTS Wins !!!");
         else if(game.getFirstCount() < game.getSecondCount())
-            System.out.println("\tAI Wins !!!");
+            System.out.println("\thMCTS Wins !!!");
         else
             System.out.println("\tIt is a draw.\n");
         System.out.println("Thanks for playing!!!");
     }
 
-    public static void askMovement(){
+
+    public static void askPMCTSMovement(){
+        game.showGameBoard();
+        System.out.print(" pMCTS place disk : ");
+        int pos[] = game.runPMCTS();
+        System.out.println(pos[0]+pos[1]);
+        game.placeDisks(pos[0], pos[1]);
+    }
+
+
+    public static void askHMCTSMovement(){
+        game.showGameBoard();
+        System.out.print(" hMCTS place disk : ");
+        int pos[] = game.runHMCTS();
+        System.out.println(pos[0]+pos[1]);
+        game.placeDisks(pos[0], pos[1]);
+
+    }
+
+
+    public static void askPlayerMovement(){
         Scanner input = new Scanner(System.in);
         String position;
         int row;
         int col;
         game.showGameBoard();
         do {
-            if (game.isTurn())
-                System.out.println(" Select a square which is a possible move(*)");
-            System.out.print(" " + (game.isTurn() ? "Player" : "AI") + " place disk (e.g. E3): ");
+            System.out.println(" Select a square which is a possible move(*)");
+            System.out.print(" Player place disk (e.g. E3): ");
             position = input.next();
             char[] pos = position.toUpperCase().toCharArray();
             col = BoardCol.valueOf(String.valueOf(pos[0])).ordinal();
@@ -52,4 +85,6 @@ public class A5 {
         } while (!game.isPossibleMove(row, col));
         game.placeDisks(row, col);
     }
+
 }
+

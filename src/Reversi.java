@@ -246,9 +246,9 @@ public class Reversi {
     public void showGameBoard() {
         System.out.println("-----------------------------------------\n");
         //System.out.println("\t\t\t   Round " + round);
-        System.out.println("\t\t Player : X   AI : O \t\t");
+        System.out.println("\t\t pMCTS : X   hMCTS : O \t\t");
         System.out.println("\t\t\tCurrent Score\t\t\t");
-        System.out.println("\tPlayer : " + firstCount + "\t\t\tAI : " + secondCount + "\n");
+        System.out.println("\tpMCTS : " + firstCount + "\t\t\thMCTS : " + secondCount + "\n");
 
         System.out.print("\t    ");
         for (BoardCol col : BoardCol.values())
@@ -272,6 +272,22 @@ public class Reversi {
         for (BoardCol col : BoardCol.values())
             System.out.print(col + " ");
         System.out.println("\n\n-----------------------------------------\n");
+    }
+
+    public int[] runPMCTS(){
+        int x=0;
+        int y=0;
+
+
+        return new int[]{x,y};
+    }
+
+    public int[] runHMCTS(){
+        int x=0;
+        int y=0;
+
+
+        return new int[]{x,y};
     }
 
 }
