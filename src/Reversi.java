@@ -1,23 +1,26 @@
+import java.util.ArrayList;
+import java.util.List;
+
 /**
- *     turn : true as Player and false as AI
- *     gameBoard : 0 as empty, 1 as AI and 2 as Player
+ *     turn : true as pMCTS and false as hMCTS
+ *     gameBoard : 0 as empty, 1(O) as hMCTS and 2(X) as pMCTS
  */
 
 enum BoardCol {A, B, C, D, E, F, G, H}
 
-public class Reversi {
+public class Reversi implements Cloneable {
     private boolean turn;
     private int[][] gameBoard;
     private boolean[][] possibleMove;
-    private int firstCount;
-    private int secondCount;
+    private int pMCTSCount;
+    private int hMCTSCount;
 
     public Reversi(){
         this.turn = true;
         this.gameBoard = new int[8][8];
         this.possibleMove = new boolean[8][8];
-        this.firstCount = 0;
-        this.secondCount = 0;
+        this.pMCTSCount = 0;
+        this.hMCTSCount = 0;
         clearBoard();
         initBoard();
     }
@@ -45,11 +48,11 @@ public class Reversi {
         return this.possibleMove[row][col];
     }
 
-    public int getFirstCount() {
-        return firstCount;
+    public int getPMCTSCount() {
+        return pMCTSCount;
     }
-    public int getSecondCount() {
-        return secondCount;
+    public int getHMCTSCount() {
+        return hMCTSCount;
     }
 
     private void clearBoard() {
@@ -79,8 +82,8 @@ public class Reversi {
                 if (gameBoard[row][col] == 2)
                     scoreX++;
             }
-        this.firstCount = scoreX;
-        this.secondCount = scoreO;
+        this.pMCTSCount = scoreX;
+        this.hMCTSCount = scoreO;
     }
 
     private void redrawBoard(int row, int col){
@@ -245,10 +248,9 @@ public class Reversi {
 
     public void showGameBoard() {
         System.out.println("-----------------------------------------\n");
-        //System.out.println("\t\t\t   Round " + round);
         System.out.println("\t\t pMCTS : X   hMCTS : O \t\t");
         System.out.println("\t\t\tCurrent Score\t\t\t");
-        System.out.println("\tpMCTS : " + firstCount + "\t\t\thMCTS : " + secondCount + "\n");
+        System.out.println("\tpMCTS : " + pMCTSCount + "\t\t\thMCTS : " + hMCTSCount + "\n");
 
         System.out.print("\t    ");
         for (BoardCol col : BoardCol.values())
@@ -272,14 +274,16 @@ public class Reversi {
         for (BoardCol col : BoardCol.values())
             System.out.print(col + " ");
         System.out.println("\n\n-----------------------------------------\n");
+        //printPossibleList();
     }
 
-    public int[] runPMCTS(){
-        int x=0;
-        int y=0;
-
-
-        return new int[]{x,y};
+    public List<int[]> getPossibleList(){
+        List<int[]> possList = new ArrayList<>();
+        for (int row = 0; row < 8; row++)
+            for (int col = 0; col < 8; col++)
+                if (this.possibleMove[row][col])
+                    possList.add(new int[]{row,col});
+        return possList;
     }
 
     public int[] runHMCTS(){
@@ -290,4 +294,21 @@ public class Reversi {
         return new int[]{x,y};
     }
 
+    @Override
+    public Reversi clone() throws CloneNotSupportedException {
+        Reversi cloneGame = (Reversi) super.clone();
+        cloneGame.gameBoard = new int[8][8];
+        cloneGame.possibleMove = new boolean[8][8];
+        return cloneGame;
+    }
+
+    public void printPossibleList(){
+        List<int[]> list = getPossibleList();
+        System.out.println("\n\t\t possible list : ");
+        for (int[] pos : list){
+            BoardCol col = BoardCol.values()[pos[1]];
+            System.out.println("position : " + col.toString() +  (pos[0]+1) );
+        }
+        System.out.println();
+    }
 }
