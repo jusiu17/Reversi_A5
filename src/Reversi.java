@@ -298,7 +298,14 @@ public class Reversi implements Cloneable {
     public Reversi clone() throws CloneNotSupportedException {
         Reversi cloneGame = (Reversi) super.clone();
         cloneGame.gameBoard = new int[8][8];
+        for(int row = 0; row < 8; row++)
+            for(int col = 0; col < 8; col++)
+                cloneGame.gameBoard[row][col] = this.gameBoard[row][col];
         cloneGame.possibleMove = new boolean[8][8];
+        for(int row = 0; row < 8; row++)
+            for(int col = 0; col < 8; col++)
+                cloneGame.possibleMove[row][col] = this.possibleMove[row][col];
+
         return cloneGame;
     }
 
