@@ -35,6 +35,7 @@ public class A5 {
         int draw = 0;
         do {
             boolean endGame = false;
+            System.out.println("\t\t\t\t\t\t game "+ gameRun);
             do {
                 if (!game.checkFull()) {
                     if (game.hasPossibleMove()) {
