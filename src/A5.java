@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class A5 {
 
-    static int n = 5000;
+    static int n = 7500;
 
     private int[][] weights = {
             {300, -100, 100,  50,  50, 100, -100,  300},
@@ -116,11 +116,12 @@ public class A5 {
     }
 
     public static int[] runPMCTS() throws CloneNotSupportedException{
-        long startTime = System.nanoTime();
+        int playout = 0;
+        double startTime = System.nanoTime();
         Random rand = new Random();
         List<int[]> possibleList = game.getPossibleList();
         List<int[]> possibleScore = new ArrayList<>();
-        long totalTime = (System.nanoTime() - startTime)/(long)1000000000;
+        double totalTime = (System.nanoTime() - startTime)/(double)1000000000;
 
         findPossible:
         for (int[] possible : possibleList) {
@@ -137,12 +138,13 @@ public class A5 {
             for (int i = 0; i < n ; i++){
                 temp_move = temp_gameMove.getPossibleList();
                 int[] move;
+
                 while(!temp_move.isEmpty()){
                     score += temp_move.size();
                     move = temp_move.get(rand.nextInt(temp_move.size()));
                     temp_gameMove.placeDisks(move[0], move[1]);
                     temp_move = temp_gameMove.getPossibleList();
-                    totalTime = (long) (System.nanoTime() - startTime)/(long)1000000000;
+                    totalTime = (double) (System.nanoTime() - startTime)/(double)1000000000;
                     if(totalTime > 4.9995)
                         break findPossible;
                 }
@@ -161,6 +163,7 @@ public class A5 {
                 }
 
                 temp_gameMove = (Reversi) temp_game.clone();
+                playout++;
             }
             possibleScore.add(new int[]{score, x, y});
         }
@@ -178,7 +181,9 @@ public class A5 {
             }
             //System.out.println("score : " + score[0] + " \trow : " + (score[1]+1) + " \tcol : " + BoardCol.values()[score[2]] + " \thighest : " + highest);
         }
+        totalTime = (double) (System.nanoTime() - startTime)/(double)1000000000;
         System.out.println(" Run Time : " + totalTime + "s");
+        System.out.println(" Total playouts : "+ playout + " \t and playouts in 1 second : " + ( (totalTime > 1) ? playout/totalTime : playout ) );
 /*        if(totalTime > 5){
             System.exit(0);
         }*/
@@ -239,8 +244,8 @@ public class A5 {
         }
         int random = rand.nextInt(possibleScore.size());
         int highest = possibleScore.get(random)[0];
-        int row = possibleScore.get(random)[1];;
-        int col = possibleScore.get(random)[2];;
+        int row = possibleScore.get(random)[1];
+        int col = possibleScore.get(random)[2];
         for (int[] score : possibleScore){
             if(score[0] > highest) {
                 highest = score[0];
