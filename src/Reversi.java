@@ -8,6 +8,8 @@ import java.util.List;
 
 enum BoardCol {A, B, C, D, E, F, G, H}
 
+
+
 public class Reversi implements Cloneable {
     private boolean turn;
     private int[][] gameBoard;
@@ -25,6 +27,28 @@ public class Reversi implements Cloneable {
         initBoard();
     }
 
+    public boolean isLegalMove(int column){
+        return gameBoard[0][column]==0;
+    }
+    public boolean placeMove(int column, int player){
+        if(!isLegalMove(column)) {System.out.println("Illegal move!"); return false;}
+        for(int i=5;i>=0;--i){
+            if(gameBoard[i][column] == 0) {
+                gameBoard[i][column] = (byte)player;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void undoMove(int column){
+        for(int i=0;i<=5;++i){
+            if(gameBoard[i][column] != 0) {
+                gameBoard[i][column] = 0;
+                break;
+            }
+        }
+    }
 
     public boolean isTurn() {
         return turn;
@@ -285,15 +309,7 @@ public class Reversi implements Cloneable {
                     possList.add(new int[]{row,col});
         return possList;
     }
-
-    public int[] runHMCTS(){
-        int x=0;
-        int y=0;
-
-
-        return new int[]{x,y};
-    }
-
+    
     @Override
     public Reversi clone() throws CloneNotSupportedException {
         Reversi cloneGame = (Reversi) super.clone();

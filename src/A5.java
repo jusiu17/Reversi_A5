@@ -69,7 +69,7 @@ public class A5 {
 
     public static void askHMCTSMovement(){
         game.showGameBoard();
-        int pos[] = game.runHMCTS();
+        int pos[] = runHMCTS();
         BoardCol col = BoardCol.values()[pos[0]];
         System.out.println(" hMCTS place disk : " + col.toString() + pos[1]);
         game.placeDisks(pos[0], pos[1]);
@@ -165,5 +165,68 @@ public class A5 {
         }*/
         return new int[]{row,col};
     }
-}
 
+    public int[] runHMCTS()throws CloneNotSupportedException{
+        int x=0;
+        int y=0;
+        Reversi temp_game = (Reversi) game.clone();
+        int[] tempReuslt =  minimax(temp_game,false, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+        return new int[]{x,y};
+    }
+
+    public int[] minimax(Reversi broad,boolean turn,int depth,int alpha ,int beta) throws CloneNotSupportedException{
+
+        int best_utility = 1000;
+        int row, col;
+        Random rand = new Random();
+        List<int[]> possibleList = game.getPossibleList();
+        List<int[]> possibleScore = new ArrayList<>();
+        int maxScore=Integer.MIN_VALUE, minScore = Integer.MAX_VALUE;
+        for (int[] possible : possibleList) {
+            Reversi temp_game = (Reversi) broad.clone();                    //複製一個新的
+            int currentScore = 0;                                           //count the score
+            int x = possible[0];                                            //two placement
+            int y = possible[1];
+
+            List<int[]> temp_move;                                          //Assume movement
+            int[] nextMove;
+            temp_game.placeDisks(x,y);                                      //put the assume in to the broad
+            //trough into the recursive function to run next levels children
+            nextMove= minimax(temp_game,!turn, depth+1, Integer.MIN_VALUE, Integer.MAX_VALUE);
+//            currentScore += temp_move.size();
+            //----------------------------- n  --- this get the HIGHTEST score
+            int[] move;
+            currentScore /= 10;
+
+            possibleScore.add(new int[]{currentScore, x, y});
+            if(!game.isTurn()){
+                if (game.getHMCTSCount() > 32)
+                    currentScore += 100;
+                else if (temp_game.getHMCTSCount() == 32)
+                    currentScore += 30;
+            }
+            else{
+                if (temp_game.getPMCTSCount() > 32)
+                    currentScore += 100;
+                else if (temp_game.getPMCTSCount() == 32)
+                    currentScore += 30;
+            }
+        }
+
+        int random = rand.nextInt(possibleScore.size());
+        int highest = possibleScore.get(random)[0];
+        int row = possibleScore.get(random)[1];;
+        int col = possibleScore.get(random)[2];;
+        for (int[] score : possibleScore){
+            if(score[0] > highest) {
+                highest = score[0];
+                row = score[1];
+                col = score[2];
+            }
+        }
+
+
+        return new int[]{row, col};
+    }
+}
