@@ -309,7 +309,7 @@ public class Reversi implements Cloneable {
                     possList.add(new int[]{row,col});
         return possList;
     }
-    
+
     @Override
     public Reversi clone() throws CloneNotSupportedException {
         Reversi cloneGame = (Reversi) super.clone();
