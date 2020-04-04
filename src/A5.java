@@ -27,25 +27,16 @@ public class A5 {
                             {99, -8, 8, 6, 6, 8, -8, 99}};
 
     static Reversi game = new Reversi();
+
     public static void main(String[] arg) throws CloneNotSupportedException {
-        boolean endGame = false;
+        int gameRun = 0;
+        int pmctsWin = 0;
+        int hmctsWin = 0;
+        int draw = 0;
         do {
-            if (!game.checkFull()) {
-                if (game.hasPossibleMove()) {
-                    if (game.isTurn())
-                        //TODO : player for now should be pMCTS
-                        askPMCTSMovement();
-                        //askPlayerMovement();
-                    else
-                        //TODO : player for now should be hMCTS
-                        askHMCTSMovement();
-//                        askPlayerMovement();
-//                        askPMCTSMovement();
-                } else {
-                    game.showGameBoard();
-                    System.out.println(" " + (game.isTurn() ? "pMCTS" : "hMCTS") + " has no possible move\n Chance passes back to " + (!game.isTurn() ? "pMCTS" : "hMCTS"));
-                    game.setTurn(!game.isTurn());
-                    game.generatePossible();
+            boolean endGame = false;
+            do {
+                if (!game.checkFull()) {
                     if (game.hasPossibleMove()) {
                         if (game.isTurn())
                             //TODO : player for now should be pMCTS
@@ -54,26 +45,54 @@ public class A5 {
                         else
                             //TODO : player for now should be hMCTS
                             askHMCTSMovement();
-//                            askPlayerMovement();
-//                            askPMCTSMovement();
+//                        askPlayerMovement();
+//                        askPMCTSMovement();
                     } else {
                         game.showGameBoard();
-                        System.out.println(" " + (game.isTurn() ? "pMCTS" : "hMCTS") + " has no possible move also");
-                        endGame = true;
+                        System.out.println(" " + (game.isTurn() ? "pMCTS" : "hMCTS") + " has no possible move\n Chance passes back to " + (!game.isTurn() ? "pMCTS" : "hMCTS"));
+                        game.setTurn(!game.isTurn());
+                        game.generatePossible();
+                        if (game.hasPossibleMove()) {
+                            if (game.isTurn())
+                                //TODO : player for now should be pMCTS
+                                askPMCTSMovement();
+                                //askPlayerMovement();
+                            else
+                                //TODO : player for now should be hMCTS
+                                askHMCTSMovement();
+//                            askPlayerMovement();
+//                            askPMCTSMovement();
+                        } else {
+                            game.showGameBoard();
+                            System.out.println(" " + (game.isTurn() ? "pMCTS" : "hMCTS") + " has no possible move also");
+                            endGame = true;
+                        }
                     }
-                }
-            } else
-                endGame = true;
-        } while (!endGame);
+                } else
+                    endGame = true;
+            } while (!endGame);
 
-        game.showGameBoard();
-        if (game.getPMCTSCount() > game.getHMCTSCount())
-            System.out.println("\tpMCTS Wins !!!");
-        else if (game.getPMCTSCount() < game.getHMCTSCount())
-            System.out.println("\thMCTS Wins !!!");
-        else
-            System.out.println("\tIt is a draw.\n");
-        System.out.println("Thanks for playing!!!");
+            game.showGameBoard();
+            if (game.getPMCTSCount() > game.getHMCTSCount()){
+                System.out.println("\tpMCTS Wins !!!");
+                pmctsWin++;
+            }
+            else if (game.getPMCTSCount() < game.getHMCTSCount()) {
+                System.out.println("\thMCTS Wins !!!");
+                hmctsWin++;
+            }
+            else {
+                System.out.println("\tIt is a draw.\n");
+                draw++;
+            }
+            game = new Reversi();
+            gameRun++;
+        }while (gameRun!=100);
+        //System.out.println("Thanks for playing!!!");
+
+        System.out.println("PMCTS win : " + pmctsWin + " time(s)");
+        System.out.println("HMCTS win : " + hmctsWin + " time(s)");
+        System.out.println("Draw : " + draw + " time(s)");
     }
 
 
@@ -89,12 +108,11 @@ public class A5 {
     public static void askHMCTSMovement()throws CloneNotSupportedException{
         game.showGameBoard();
         int pos[] = runHMCTS();
-        BoardCol col = BoardCol.values()[pos[0]];
-        System.out.println(" hMCTS place disk : " + col.toString() + pos[1]);
+        BoardCol col = BoardCol.values()[pos[1]];
+        System.out.println(" hMCTS place disk : " + col.toString() + (pos[0]+1));
         game.placeDisks(pos[0], pos[1]);
 
     }
-
 
     public static void askPlayerMovement(){
         Scanner input = new Scanner(System.in);
