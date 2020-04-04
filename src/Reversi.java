@@ -325,13 +325,4 @@ public class Reversi implements Cloneable {
         return cloneGame;
     }
 
-    public void printPossibleList(){
-        List<int[]> list = getPossibleList();
-        System.out.println("\n\t\t possible list : ");
-        for (int[] pos : list){
-            BoardCol col = BoardCol.values()[pos[1]];
-            System.out.println("position : " + col.toString() +  (pos[0]+1) );
-        }
-        System.out.println();
-    }
 }
