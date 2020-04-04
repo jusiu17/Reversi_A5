@@ -17,7 +17,7 @@ public class A5 {
             {-100, -200, -50, -50, -50, -50, -200, -100},
             {300, -100, 100,  50,  50, 100, -100,  300}};
 
-    private int[][]weight_scores = {{99, -8, 8, 6, 6, 8, -8, 99},
+    private static int[][]weight_scores = {{99, -8, 8, 6, 6, 8, -8, 99},
             {-8, -24, -4, -3, -3, -4, -24, -8},
             {8, -4, 7, 4, 4, 7, -4, 8},
             {6, -3, 4, 0, 0, 4, -3, 6},
@@ -38,9 +38,9 @@ public class A5 {
                         //askPlayerMovement();
                     else
                         //TODO : player for now should be hMCTS
-                        //askHMCTSMovement();
+                        askHMCTSMovement();
 //                        askPlayerMovement();
-                        askPMCTSMovement();
+//                        askPMCTSMovement();
                 } else {
                     game.showGameBoard();
                     System.out.println(" " + (game.isTurn() ? "pMCTS" : "hMCTS") + " has no possible move\n Chance passes back to " + (!game.isTurn() ? "pMCTS" : "hMCTS"));
@@ -55,7 +55,7 @@ public class A5 {
                             //TODO : player for now should be hMCTS
                             askHMCTSMovement();
 //                            askPlayerMovement();
-                            askPMCTSMovement();
+//                            askPMCTSMovement();
                     } else {
                         game.showGameBoard();
                         System.out.println(" " + (game.isTurn() ? "pMCTS" : "hMCTS") + " has no possible move also");
@@ -86,7 +86,7 @@ public class A5 {
     }
 
 
-    public static void askHMCTSMovement(){
+    public static void askHMCTSMovement()throws CloneNotSupportedException{
         game.showGameBoard();
         int pos[] = runHMCTS();
         BoardCol col = BoardCol.values()[pos[0]];
@@ -185,7 +185,7 @@ public class A5 {
         return new int[]{row,col};
     }
 
-    public int[] runHMCTS()throws CloneNotSupportedException{
+    public static int[] runHMCTS()throws CloneNotSupportedException{
         Reversi temp_game = (Reversi) game.clone();
         int[] tempReuslt =  minimax(temp_game,false, 0, Integer.MIN_VALUE, Integer.MAX_VALUE);
         int x=tempReuslt[1];
@@ -193,7 +193,7 @@ public class A5 {
         return new int[]{x,y};
     }
 
-    public int[] minimax(Reversi broad,boolean turn,int depth,int alpha ,int beta) throws CloneNotSupportedException{
+    public static int[] minimax(Reversi broad,boolean turn,int depth,int alpha ,int beta) throws CloneNotSupportedException{
         if (depth==5){
             return new int[]{};
         }
